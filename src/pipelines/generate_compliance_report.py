@@ -35,7 +35,7 @@ class ClinicalReportCompiler:
         filename = f"UWMED_TRIAL_{trial_id}_{timestamp}.md"
         full_path = os.path.join(self.output_dir, filename)
         
-        markdown_template = f"""# 📝 UW Medicine Clinical Imaging Research Run Report
+        markdown_template = f"""# UW Medicine Clinical Imaging Research Run Report
 ## Authentication ID Identifier: `{trial_id}`
 * **Generation Timestamp:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 * **Modality Equipment Core:** {config_metadata['calibration_meta']['target_device']}
