@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  flir-ingest-worker:
+    container_name: flir_nvidia_worker
+    build:
+      context: .
+      dockerfile: Dockerfile.jetson
+    restart: unless-stopped
+    # Mount local system event pipelines to allow the container to detect hot-plugged FLIR hardware
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb
+      - /run/udev:/run/udev:ro
+    # Elevate runtime privileges to allow the container to interact with low-level USB registers
+    privileged: true
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CUDA_VISIBLE_DEVICES=0
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  telemetry-dashboard:
+    container_name: uwmed_thermal_dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile.jetson
+    restart: unless-stopped
+    # Execute entrypoint override to transition this container node into dashboard visualizer mode
+    command: ["streamlit", "run", "pipelines/stream_dashboard.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - flir-ingest-worker
