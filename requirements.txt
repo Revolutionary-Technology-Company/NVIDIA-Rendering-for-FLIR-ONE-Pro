@@ -1,0 +1,13 @@
+# --- Core Math & Hardware-Accelerated Compute Matrices ---
+numpy==1.26.4
+numba==0.59.1
+
+# --- Physical Hardware & Ingestion Driver Interfaces ---
+pyusb==1.2.1
+
+# --- Visual Digital Signal Processing & UI Interface Elements ---
+opencv-python-headless==4.9.0.80
+streamlit==1.32.2
+
+# --- Code Quality Assurance Systems (Testing Lifecycle Only) ---
+flake8==7.0.0
