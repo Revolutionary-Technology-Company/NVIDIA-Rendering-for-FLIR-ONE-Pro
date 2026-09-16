@@ -1,0 +1,39 @@
+# Stage 1: Build and compile system dependencies
+FROM nvcr.io/nvidia/l4t-pytorch:r36.2.0-pth2.1-py3.10 AS builder
+
+WORKDIR /build
+
+# Install core build matrices and physical hardware communication headers
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libusb-1.0-0-dev \
+    pkg-config \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Stage 2: Runtime Environment Integration Setup
+FROM nvcr.io/nvidia/l4t-pytorch:r36.2.0-pth2.1-py3.10
+
+WORKDIR /app
+
+# Install minimal runtime shared system dependencies 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libusb-1.0-0 \
+    udev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy pre-configured pip package arrays from requirements specification
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Copy orchestration pipelines and parameters down into the active image
+COPY pipelines/ ./pipelines/
+COPY configs/ ./configs/
+
+# Expose local intranet telemetry portal port
+EXPOSE 8501
+
+# Enforce direct container execution via non-buffered python execution
+ENV PYTHONUNBUFFERED=1
+
+CMD ["python3", "pipelines/flir_stream_ingest.py"]
