@@ -1,0 +1,25 @@
+{
+  "calibration_meta": {
+    "target_device": "FLIR ONE Pro",
+    "sensor_core": "FLIR Lepton 3.5 Longwave Infrared Microbolometer",
+    "facility_assignment": "UW Medicine Research Integration Facility",
+    "last_nct_validation": "2026-04-12"
+  },
+  "radiometric_constants": {
+    "planck_r1": 16512.0,
+    "planck_b": 1428.0,
+    "planck_f": 1.0,
+    "planck_o": -120.0
+  },
+  "clinical_trial_defaults": {
+    "human_tissue_emissivity": 0.98,
+    "standard_atmospheric_transmission": 0.99,
+    "nominal_distance_meters": 1.0,
+    "reflected_apparent_temperature_celsius": 22.0
+  },
+  "cuda_thread_allocation": {
+    "threads_per_block_x": 16,
+    "threads_per_block_y": 16,
+    "stream_concurrency_ceiling": 4
+  }
+}
